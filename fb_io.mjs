@@ -13,10 +13,13 @@ const COL_B = '#CD7F32';
 // Import all external constants & functions required
 /**************************************************************/
 // Import all the methods you want to call from the firebase modules
-
+import { getAuth, onAuthStateChanged }
+from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup }
+from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { initializeApp }
- from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getAnalytics } 
+from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getAnalytics }
 from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
 
 /**************************************************************/
@@ -29,7 +32,7 @@ function fb_initialise() {
     console.log('%c fb_initialise(): ', 
         'color: ' + COL_C + '; background-color: ' + COL_B + ';');
     console.log("Hello world");
-    const firebaseConfig = {
+    const FB_GAMECONFIG = {
         apiKey: "AIzaSyDHgtIZMIZCJPiRtsGfPR7U7MRHkROTFH4",
         authDomain: "comp2025-anthony-elliott.firebaseapp.com",
         databaseURL: "https://comp2025-anthony-elliott-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -39,15 +42,33 @@ function fb_initialise() {
         appId: "1:547175988310:web:2d1b6a9924211d2d600ff7",
         measurementId: "G-KC1L63N0S9"
       };
-      const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    console.info(analytics);  
+    
+    const FB_GAMEAPP = initializeApp(FB_GAMECONFIG);
+    
+    const FB_GAMEDB  = getAnalytics(FB_GAMEAPP);
+      console.info(FB_GAMEDB);
 }
-fb_authenticate()
+function fb_authenticate(){
+    const AUTH = getAuth();
+    const PROVIDER = new GoogleAuthProvider();
+    PROVIDER.setCustomParameters({
+        prompt: 'select_account'
+    });
+
+    signInWithPopup(AUTH, PROVIDER).then((result) => {
+        console.log("Authentication succesful");
+        console.log(result);
+    })
+
+    .catch((error) => {
+        console.log("Authentication unsuccesful");
+        console.log(error);
+    });
+}
 export { 
-    fb_initialise
-    fb_authenticate
+    fb_initialise, fb_authenticate
  };
+
 
 
 
