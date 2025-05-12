@@ -13,18 +13,10 @@ const COL_B = '#CD7F32';
 // Import all external constants & functions required
 /**************************************************************/
 // Import all the methods you want to call from the firebase modules
-import { ref, set }
-from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
-import { signOut }
-from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { onAuthStateChanged }
-from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup }
-from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getAnalytics }
-from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
+import { ref, set, getDatabase, get, update } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+import { signOut, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 
 /**************************************************************/
 // EXPORT FUNCTIONS
@@ -49,8 +41,8 @@ function fb_initialise() {
     
     const FB_GAMEAPP = initializeApp(FB_GAMECONFIG);
     
-    const FB_GAMEDB  = getAnalytics(FB_GAMEAPP);
-      console.info(FB_GAMEDB);
+    FB_GAMEDB  = getDatabase(FB_GAMEAPP);
+    console.info(FB_GAMEDB);
 
 }
 function fb_authenticate(){
@@ -111,22 +103,57 @@ function fb_signout(){
     });
 }
 function fb_write(){
-    const REF = ref(FB_GAMEDB, stupid/dumb);
+    var dbReference= ref(FB_GAMEDB, "Users/UserID");
+    var userInformation = {HighScore: 10, Name: 'Ant'};
 
-    set(REF, {name: 'ants', score: '66'}).then(() => {
+    set(dbReference, userInformation).then(() => {
 
         console.log("succesful write")
 
     }).catch((error) => {
 
         console.log("unsuccesful write")
+        console.log(error);
 
     });
 
   
 }
+function fb_read(){
+    const dbReference= ref(FB_GAMEDB, "Users/UserID");
+
+    get(dbReference).then((snapshot) => {
+
+        var fb_data = snapshot.val();
+
+        if (fb_data != null) {
+
+            console.log("succesful read")
+
+        } else {
+
+            console.log("no record found")
+
+        }
+
+    }).catch((error) => {
+
+        console.log("error with reading")
+        console.log(error)
+
+    });
+}
+function fb_update(){
+    const dbReference= ref(FB_GAMEDB, "Users/UserID");
+    update(dbReference, _data).then(() => {
+        console.log("succesful update")
+    }).catch((error) => {
+        console.log("unsuccesful update")
+        console.log(error)
+    });
+}
 export { 
-    fb_initialise, fb_authenticate, fb_signout, fb_authchange, fb_write
+    fb_initialise, fb_authenticate, fb_signout, fb_authchange, fb_write, fb_read
  };
 
 

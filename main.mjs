@@ -14,13 +14,14 @@ console.log('%c main.mjs',
 /**************************************************************/
 // Import all the constants & functions required from fb_io module
 
-import { fb_initialise, fb_authenticate, fb_signout, fb_authchange, fb_write}
+import { fb_initialise, fb_authenticate, fb_signout, fb_authchange, fb_write, fb_read}
     from './fb_io.mjs';
     window.fb_initialise   = fb_initialise;
     window.fb_authenticate   = fb_authenticate;
     window.fb_signout   = fb_signout;
     window.fb_authchange   = fb_authchange;
     window.fb_write   = fb_write;
+    window.fb_read   = fb_read;
  
 /**************************************************************/
 // index.html main code
